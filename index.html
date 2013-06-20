@@ -9,6 +9,10 @@
 <script src="assets/three.min.js"></script>
 <script src="assets/leap.js"></script>
 <script defer="defer">
+// Created by Yu Jiang Tham
+// http://www.yujiangtham.com
+// http://www.github.com/ytham
+
 // scene variables
 var renderer, camera, light, scene, paddle_near, paddle_far, ball;
 var arena_left, arena_right, arena_top, arena_bottom;
@@ -203,8 +207,8 @@ function update() {
     
     // far paddle: mouse control/AI
     if(leap_with_AI) { // AI
-      paddle_far.position.x += (ball.position.x - paddle_far.position.x)/(6-ball.position.z/100);
-      paddle_far.position.y += (ball.position.y - paddle_far.position.y)/(6-ball.position.z/100);
+      paddle_far.position.x += (ball.position.x - paddle_far.position.x)/(5.5-ball.position.z/100);
+      paddle_far.position.y += (ball.position.y - paddle_far.position.y)/(5.5-ball.position.z/100);
     } else { // when user moves mouse, leap_with_AI becomes false and user controls mouse
       if(mouse) {
         mouseArena = convertMouseCoordinates(mouse.x,mouse.y);
@@ -382,14 +386,13 @@ function resetBall() {
 }
 
 function randomBallVelocity() {
-  //return [Math.random()*4 - 2, Math.random()*4 - 2, Math.random()*16 - 8];
-  return [0,0,5];
+  return [Math.random()*4 - 2, Math.random()*4 - 2, Math.random()*16 - 8];
 }
 
 function computeBounceVector(x1,y1,x2,y2) {
   var x = x2 - x1;
   var y = y2 - y1;
-  return [x/15,y/15];
+  return [x/14,y/14];
 } 
 
 window.onmousemove = getMousePosition;
