@@ -43,10 +43,12 @@ var size_y_ball = size_y - ballSize - 2;
 
 // colors
 var color_stars = 0x005500;
-var color_highlight = 0xff0000;
+var color_highlight = 0x00FF00;
 var color_arenaX = 0x333333;
 var color_arenaY = 0x222222;
 var color_arena_hightlight = 0x555555;
+var color_near_paddle = 0x00AAFF;
+var color_far_paddle = 0xFFAA00;
 
 // mouse events
 var mouse;
@@ -117,7 +119,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // camera
-  camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 1, 1200);
+  camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 1, 1400);
   camera.position.x = 0;
   camera.position.y = 0;
   camera.position.z = 670;
@@ -230,8 +232,8 @@ function update() {
   particleSystem.position.z += ballVector[2]*3;
 
   // reset colors each frame
-  paddle_near.material.color.setHex(0x00AAFF);
-  paddle_far.material.color.setHex(0xFFAA00);
+  paddle_near.material.color.setHex(color_near_paddle);
+  paddle_far.material.color.setHex(color_far_paddle);
   particleSystem.material.color.setHex(color_stars);
   arena_left.material.color.setHex(color_arenaX);
   arena_right.material.color.setHex(color_arenaX);
@@ -251,10 +253,10 @@ function update() {
   // player paddle collision
   if(intersect_player.length > 0) {
     if(intersect_player[0].distance < 25) {
-      paddle_near.material.color.setHex(0x00FF00);
-      ball.material.color.setHex(0x33AAFF);
+      paddle_near.material.color.setHex(color_highlight);
+      ball.material.color.setHex(color_near_paddle);
       particleSystem.material.color.setHex(color_highlight);
-      var bounceVector = computeVector(paddle_far.position.x,paddle_far.position.y,ball.position.x,ball.position.y);
+      var bounceVector = computeBounceVector(paddle_near.position.x,paddle_near.position.y,ball.position.x,ball.position.y);
       ballVector[0] += bounceVector[0];
       ballVector[1] += bounceVector[1];
       ballVector[2] = -ballVector[2] - 0.5;
@@ -262,13 +264,15 @@ function update() {
     }
   }
 
+  //console.log(paddle_near.position.x + " | " + ball.position.x);
+
   // computer paddle intersect
   if(intersect_computer.length > 0) {
     if(intersect_computer[0].distance < 25) {
-      paddle_far.material.color.setHex(0x00FF00);
+      paddle_far.material.color.setHex(color_highlight);
       particleSystem.material.color.setHex(color_highlight);
-      ball.material.color.setHex(0xFFAA33);
-      var bounceVector = computeVector(paddle_near.position.x,paddle_near.position.y,ball.position.x,ball.position.y);
+      ball.material.color.setHex(color_far_paddle);
+      var bounceVector = computeBounceVector(paddle_far.position.x,paddle_far.position.y,ball.position.x,ball.position.y);
       ballVector[0] += bounceVector[0];
       ballVector[1] += bounceVector[1];
       ballVector[2] = -ballVector[2] + 0.5;
@@ -338,7 +342,7 @@ function update() {
       document.getElementById("bluecontroller").innerHTML = "LEAP";
       document.getElementById("orangecontroller").innerHTML = "AI";
     } else if (leap == true && leap_with_AI == false) {
-      infoString = "Mouse movement detected.  Orange paddle controlled by mouse."
+      infoString = "Mouse movement detected.  Orange controlled by mouse.  Blue controlled by Leap."
       document.getElementById("bluecontroller").innerHTML = "LEAP";
       document.getElementById("orangecontroller").innerHTML = "MOUSE";
     } else {
@@ -378,13 +382,14 @@ function resetBall() {
 }
 
 function randomBallVelocity() {
-  return [Math.random()*4 - 2, Math.random()*4 - 2, Math.random()*16 - 8];
+  //return [Math.random()*4 - 2, Math.random()*4 - 2, Math.random()*16 - 8];
+  return [0,0,5];
 }
 
-function computeVector(x1,y1,x2,y2) {
+function computeBounceVector(x1,y1,x2,y2) {
   var x = x2 - x1;
   var y = y2 - y1;
-  return [x/20,y/20];
+  return [x/15,y/15];
 } 
 
 window.onmousemove = getMousePosition;
