@@ -123,10 +123,10 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // camera
-  camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHeight, 1, 1400);
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 1400);
   camera.position.x = 0;
   camera.position.y = 0;
-  camera.position.z = 590;
+  camera.position.z = 630;
   camera.lookAt(new THREE.Vector3(0,0,0));
   //camera.rotation.x = 45 * (Math.PI / 180);
 
